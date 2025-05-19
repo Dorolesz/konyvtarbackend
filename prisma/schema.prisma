@@ -1,0 +1,27 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model books {
+  id           Int    @id @default(autoincrement())
+  title        String    @db.VarChar(255)
+  author       String    @db.VarChar(255)
+  publish_year Int
+  page_count   Int
+  created_at   DateTime? @db.Timestamp(0)
+  updated_at   DateTime? @db.Timestamp(0)
+  rentals rentals[]
+}
+
+model rentals {
+  id Int @id @default(autoincrement())
+  book_id Int
+  book books @relation(fields: [book_id], references: [id])
+  start_date DateTime @default(now())
+  end_date DateTime
+}
